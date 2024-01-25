@@ -1,3 +1,13 @@
 {
-  "siswa": []
+  "siswa": [
+    {
+      "id": "3f1c",
+      "nama_depan": "raden",
+      "nama_belakang": "anjay",
+      "alamat": "hehehehe",
+      "kelas": "XII",
+      "jurusan": "TKR",
+      "tanggal_lahir": "2024-01-13"
+    }
+  ]
 }

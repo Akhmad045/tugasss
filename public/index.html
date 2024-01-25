@@ -24,7 +24,7 @@
                             <th>No</th>
                             <th>Nama Lengkap</th>
                             <th>Alamat</th>
-                            <th>Kelas</th>>
+                            <th>Kelas</th>
                             <th>Tanggal Lahir</th>
                             <th>Aksi</th>
                         </tr>
@@ -63,20 +63,20 @@
                             <label for="nama_depan" class="form-label">Alamat</label>
                             <input type="text" class="form-control" id="alamat">
                         </div>
-                            <div class="mb-3">
+                            <div class="row mb-3">
                             <label for="nama_depan" class="form-label">Kelas</label>
                             <select class="form-select" name="kelas" id="kelas">
-                                <option value="x">X</option>
-                                <option value="xi">XI</option>
-                                <option value="xii">XII</option>
+                                <option value="X">X</option>
+                                <option value="XI">XI</option>
+                                <option value="XII">XII</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="nama_depan" class="form-label">Jurusan</label>
                             <select class="form-select" name="jurusan" id="jurusan">
-                                <option value="rpl">RPL</option>
-                                <option value="tkr">TKR</option>
-                                <option value="tkro">TKRO</option>
+                                <option value="RPL">RPL</option>
+                                <option value="TKR">TKR</option>
+                                <option value="TKRO">TKRO</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -84,7 +84,7 @@
                             <input type="date" class="form-control" id="tgl">
                         </div>
                         <div class="mb-3">
-                            <button onclick="simpanData" class="btn btn-primary form-control" type="button">
+                            <button id="simpanData" class="btn btn-primary form-control" type="button">
                                 <i class="bi bi-save-fill me-1"></i>Simpan
                             </button>
                         </div>
@@ -98,6 +98,13 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script>
+        let namadep = document.getElementById('nama_depan');
+        let nambel = document.getElementById('nama_belakang');
+        let alm = document.getElementById('alamat');
+        let kls = document.getElementById('kelas');
+        let jrs = document.getElementById('jurusan');
+        let tggl = document.getElementById('tgl');
+        
         let siswaModal = new bootstrap.Modal('#modal-siswa',{
             backdrop:'static',keyboard:false
         })
@@ -118,17 +125,18 @@
             .then((response) => {
             let students = response.data;
             let bucket = "";
+            let id = 1;
             for (let i = 0; i < students.length; i++) {
                 bucket += `
                 <tr class="align-middle">
-                    <td>${students[i].id}</td>
+                    <td>`+ (id++) +`</td>
                     <td>${students[i].nama_depan} ${students[i].nama_belakang}</td>
                     <td>${students[i].alamat}</td>
-                    <td>${students[i].kelas} ${students[i].jurusan}</td>
+                    <td>${students[i].kelas} - ${students[i].jurusan}</td>
                     <td>${students[i].tanggal_lahir}</td>
                 
                     <td>
-                    <button class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></button>
+                    <button id="editSi" onclick="editSiswa('${students[i].id}')" class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></button>
                     <button onclick="hapusData('${students[i].id}')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
@@ -144,28 +152,34 @@
                     getData();
         
         // menambahkan data
-//         const simpanData = async () => {
-//   const namaDepan = document.getElementById('nama_depan').value;
-//   const namaBelakang = document.getElementById('nama_belakang').value;
-//   const alamat = document.getElementById('alamat').value;
-//   const kelas = document.getElementById('kelas').value;
-//   const jurusan = document.getElementById('jurusan').value;
-//   const tanggal = document.getElementById('tgl').value;
+        document.getElementById('simpanData').addEventListener('click',() =>{
+            fetch(`http://localhost:3000/siswa`,{
+                method: 'POST',
+                headers: { 'Content-type': 'application/json'},
+                body: JSON.stringify({
+                    nama_depan: namadep.value,
+                    nama_belakang: nambel.value,
+                    alamat: alm.value,
+                    kelas: kls.value,
+                    jurusan: jrs.value,
+                    tanggal_lahir: tggl.value
+                })
+            })
+        })
 
-//   try {
-//     const response = await axios.post(`http://localhost:3000/siswa`, {
-//       nama_depan: namaDepan.value,
-//       nama_belakang: namaBelakang.value,
-//       alamat: alamat.value,
-//       kelas: kelas.value,
-//       jurusan: jurusan.value,
-//       tanggal_lahir: tanggal.value
-//     });
-//     console.log(response);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
+        // edit siswa
+        async function editSiswa(id){
+            siswaModal.show();
+            await fetch(`$(http://localhost:3000/siswa)/$(id)`).then(res => res.json()).then(result =>{
+                console.log(result)
+                 namadep.value = result.nama_depan
+                     nambel.value = result.nambel
+                     alm.value = result.alm
+                    kls.value = result.kls
+                    jrs.value = result.jrs
+                     tggl.value = result.tggl
+            })
+        }
 
         // menghapus data
         const hapusData = async (id) =>{
