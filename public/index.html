@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data siswa</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <!-- Main content -->
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between ">
+                <span class="card-title">Data siswa</span>
+                <button class="btn btn-primary btn-sm" id="tambah-siswa">
+                    <i class="bi bi-plus me-1"></i>Tambah
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-bordered table-hover" id="tb">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Lengkap</th>
+                            <th>Alamat</th>
+                            <th>Kelas</th>>
+                            <th>Tanggal Lahir</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hasil">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- End main content -->
+
+    <!-- Modal untuk form add dan update data siswa -->
+    <div class="modal" id="modal-siswa">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">Form siswa</span>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" id="formData">
+                        <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Nama depan</label>
+                            <input type="text" class="form-control" id="nama_depan">
+                        </div>
+                    <form action="" method="post" id="formData">
+                        <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Nama Belakang</label>
+                            <input type="text" class="form-control" id="nama_belakang">
+                        </div>
+            
+                    <form action="" method="post" id="formData">
+                        <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Alamat</label>
+                            <input type="text" class="form-control" id="alamat">
+                        </div>
+                            <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Kelas</label>
+                            <select class="form-select" name="kelas" id="kelas">
+                                <option value="x">X</option>
+                                <option value="xi">XI</option>
+                                <option value="xii">XII</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Jurusan</label>
+                            <select class="form-select" name="jurusan" id="jurusan">
+                                <option value="rpl">RPL</option>
+                                <option value="tkr">TKR</option>
+                                <option value="tkro">TKRO</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nama_depan" class="form-label">Tanggal Lahir</label>
+                            <input type="date" class="form-control" id="tgl">
+                        </div>
+                        <div class="mb-3">
+                            <button onclick="simpanData" class="btn btn-primary form-control" type="button">
+                                <i class="bi bi-save-fill me-1"></i>Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end modal -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let siswaModal = new bootstrap.Modal('#modal-siswa',{
+            backdrop:'static',keyboard:false
+        })
+
+        // tampilkan modal dengan tombol tambah
+        document.getElementById('tambah-siswa').addEventListener('click',()=>{
+            siswaModal.show()
+        })
+
+        // event saat modal muncul
+        document.getElementById('modal-siswa').addEventListener('shown.bs.modal',()=>{
+            document.getElementById('nama_depan').focus()
+        })
+        
+        // mengambil data
+                const getData = async () => {
+        await axios.get(`http://localhost:3000/siswa`)
+            .then((response) => {
+            let students = response.data;
+            let bucket = "";
+            for (let i = 0; i < students.length; i++) {
+                bucket += `
+                <tr class="align-middle">
+                    <td>${students[i].id}</td>
+                    <td>${students[i].nama_depan} ${students[i].nama_belakang}</td>
+                    <td>${students[i].alamat}</td>
+                    <td>${students[i].kelas} ${students[i].jurusan}</td>
+                    <td>${students[i].tanggal_lahir}</td>
+                
+                    <td>
+                    <button class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></button>
+                    <button onclick="hapusData('${students[i].id}')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                `;
+            }
+            document.getElementById('hasil').innerHTML = bucket;
+            })
+            .catch((error) => {
+            let bucket = "";
+            console.log(error);
+            });
+        }
+                    getData();
+        
+        // menambahkan data
+//         const simpanData = async () => {
+//   const namaDepan = document.getElementById('nama_depan').value;
+//   const namaBelakang = document.getElementById('nama_belakang').value;
+//   const alamat = document.getElementById('alamat').value;
+//   const kelas = document.getElementById('kelas').value;
+//   const jurusan = document.getElementById('jurusan').value;
+//   const tanggal = document.getElementById('tgl').value;
+
+//   try {
+//     const response = await axios.post(`http://localhost:3000/siswa`, {
+//       nama_depan: namaDepan.value,
+//       nama_belakang: namaBelakang.value,
+//       alamat: alamat.value,
+//       kelas: kelas.value,
+//       jurusan: jurusan.value,
+//       tanggal_lahir: tanggal.value
+//     });
+//     console.log(response);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+        // menghapus data
+        const hapusData = async (id) =>{
+            await axios.delete(`http://localhost:3000/siswa/${id}`)
+            .then((response) =>{
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
+        
+    </script>
+</body>
+</html>
