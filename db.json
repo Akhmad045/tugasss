@@ -1,67 +1,22 @@
 {
   "siswa": [
     {
-      "nama_depan": "raden",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
+      "id": "b843",
+      "nama_depan": "Asep",
+      "nama_belakang": "Sapitri",
+      "alamat": "Karakatau",
+      "kelas": "XII",
       "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12",
-      "id": "f393"
+      "tanggal_lahir": "1999-06-30"
     },
     {
-      "id": "eb3e",
-      "nama_depan": "radensw",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
-      "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12"
-    },
-    {
-      "id": "3a5f",
-      "nama_depan": "radenwww",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
-      "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12"
-    },
-    {
-      "id": "5671",
-      "nama_depan": "eb3e",
-      "nama_belakang": "asdasd",
-      "alamat": "dasad",
+      "id": "7286",
+      "nama_depan": "Ujang",
+      "nama_belakang": "Bandung",
+      "alamat": "Kelpin",
       "kelas": "XI",
       "jurusan": "TKR",
-      "tanggal_lahir": "2024-01-17"
-    },
-    {
-      "id": "5bba",
-      "nama_depan": "radens",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
-      "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12"
-    },
-    {
-      "id": "6741",
-      "nama_depan": "radenwwws",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
-      "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12"
-    },
-    {
-      "id": "a870",
-      "nama_depan": "radenwww",
-      "nama_belakang": "wijaya",
-      "alamat": "ciwareng",
-      "kelas": "XI",
-      "jurusan": "RPL",
-      "tanggal_lahir": "2001-06-12"
+      "tanggal_lahir": "2024-01-19"
     }
   ]
 }

@@ -86,12 +86,10 @@
                             <input type="date" class="form-control" id="tanggal_lahir">
                         </div>
                         <div class="mb-3">
-                            <button id="simpan" onclick="simpanData()" class="btn btn-primary form-control" type="button">
+                            <button id="buttonEdit" onclick="simpanData()" class="btn btn-primary form-control" type="button">
                                 <i class="bi bi-save-fill me-1"></i>Simpan
                             </button>
-                            <button id="buttonEdit"  class="btn btn-primary form-control" type="button">
-                                <i class="bi bi-save-fill me-1"></i>Ubah
-                            </button>
+                           
                         </div>
                     </form>
                 </div>
@@ -116,6 +114,8 @@
             backdrop:'static',keyboard:false
         })
 
+       
+
         // tampilkan modal dengan tombol tambah
         document.getElementById('tambah-siswa').addEventListener('click',()=>{
             siswaModal.show()
@@ -124,6 +124,8 @@
         // event saat modal muncul
         document.getElementById('modal-siswa').addEventListener('shown.bs.modal',()=>{
             document.getElementById('nama_depan').focus()
+            // document.getElementById('buttonEdit').classList.add('d-none')
+            //     document.getElementById('simpan').classList.remove('d-none')
         })
         
         // mengambil data
@@ -160,6 +162,7 @@
         
         // menambahkan data
         const simpanData = async (id) =>{
+            
             let namadep = document.getElementById('nama_depan').value;
         let nambel = document.getElementById('nama_belakang').value;
         let alm = document.getElementById('alamat').value;
@@ -181,6 +184,7 @@
             console.log(error);
         });
         siswaModal.hide();
+        location.reload();
         }
 
         // document.getElementById('simpanData').addEventListener('',() =>{
@@ -203,7 +207,7 @@
 
             const editData = async (id) =>{
                 siswaModal.show();
-                document.getElementById('simpan').classList.add('d-none')
+                
             let index = students.findIndex(l => l.id == id)
                 document.getElementById('nama_depan').value = students[index].nama_depan;
                 document.getElementById('nama_belakang').value = students[index].nama_belakang;
@@ -211,7 +215,9 @@
                 document.getElementById('kelas').value = students[index].kelas;
                 document.getElementById('jurusan').value = students[index].jurusan;
                 document.getElementById('tanggal_lahir').value = students[index].tanggal_lahir;
-             document.getElementById('buttonEdit').setAttribute('click',`updateData(${id})`);
+                document.getElementById('buttonEdit').innerText = 'Ubah';
+             document.getElementById('buttonEdit').onclick = () => updateData(id);
+             
             }
             const updateData = async(id) => {
                 let namadep = document.getElementById('nama_depan').value;
@@ -228,12 +234,14 @@
             jurusan: jrs,
             tanggal_lahir: tggl
         })
+        
         .then((response) => {
             console.log(response);
         })
         .catch((error) =>{
             console.log(error);
         });
+        location.reload();
             }
         
         // async function editSiswa(id){
