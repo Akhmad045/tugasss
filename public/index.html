@@ -64,6 +64,7 @@
                             <input type="text" class="form-control" id="alamat">
                         </div>
                             <div class="row mb-3">
+                                <div class="col">
                             <label for="nama_depan" class="form-label">Kelas</label>
                             <select class="form-select" name="kelas" id="kelas">
                                 <option value="X">X</option>
@@ -71,7 +72,7 @@
                                 <option value="XII">XII</option>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="col mb-3">
                             <label for="nama_depan" class="form-label">Jurusan</label>
                             <select class="form-select" name="jurusan" id="jurusan">
                                 <option value="RPL">RPL</option>
@@ -79,13 +80,17 @@
                                 <option value="TKRO">TKRO</option>
                             </select>
                         </div>
+                    </div>
                         <div class="mb-3">
                             <label for="nama_depan" class="form-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control" id="tgl">
+                            <input type="date" class="form-control" id="tanggal_lahir">
                         </div>
                         <div class="mb-3">
-                            <button id="simpanData" class="btn btn-primary form-control" type="button">
+                            <button id="simpan" onclick="simpanData()" class="btn btn-primary form-control" type="button">
                                 <i class="bi bi-save-fill me-1"></i>Simpan
+                            </button>
+                            <button id="buttonEdit"  class="btn btn-primary form-control" type="button">
+                                <i class="bi bi-save-fill me-1"></i>Ubah
                             </button>
                         </div>
                     </form>
@@ -98,12 +103,14 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script>
+       // variable 
         let namadep = document.getElementById('nama_depan');
         let nambel = document.getElementById('nama_belakang');
         let alm = document.getElementById('alamat');
         let kls = document.getElementById('kelas');
         let jrs = document.getElementById('jurusan');
         let tggl = document.getElementById('tgl');
+        let students = []
         
         let siswaModal = new bootstrap.Modal('#modal-siswa',{
             backdrop:'static',keyboard:false
@@ -123,7 +130,7 @@
                 const getData = async () => {
         await axios.get(`http://localhost:3000/siswa`)
             .then((response) => {
-            let students = response.data;
+             students = response.data;
             let bucket = "";
             let id = 1;
             for (let i = 0; i < students.length; i++) {
@@ -136,7 +143,7 @@
                     <td>${students[i].tanggal_lahir}</td>
                 
                     <td>
-                    <button id="editSi" onclick="editSiswa('${students[i].id}')" class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></button>
+                    <button onclick="editData('${students[i].id}')" class="btn btn-sm btn-success"><i class="bi bi-pencil"></i></button>
                     <button onclick="hapusData('${students[i].id}')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>
@@ -152,34 +159,110 @@
                     getData();
         
         // menambahkan data
-        document.getElementById('simpanData').addEventListener('click',() =>{
-            fetch(`http://localhost:3000/siswa`,{
-                method: 'POST',
-                headers: { 'Content-type': 'application/json'},
-                body: JSON.stringify({
-                    nama_depan: namadep.value,
-                    nama_belakang: nambel.value,
-                    alamat: alm.value,
-                    kelas: kls.value,
-                    jurusan: jrs.value,
-                    tanggal_lahir: tggl.value
-                })
-            })
+        const simpanData = async (id) =>{
+            let namadep = document.getElementById('nama_depan').value;
+        let nambel = document.getElementById('nama_belakang').value;
+        let alm = document.getElementById('alamat').value;
+        let kls = document.getElementById('kelas').value;
+        let jrs = document.getElementById('jurusan').value;
+        let tggl = document.getElementById('tanggal_lahir').value;
+        await axios.post(`http://localhost:3000/siswa`,{
+            nama_depan: namadep,
+            nama_belakang: nambel,
+            alamat: alm,
+            kelas: kls,
+            jurusan: jrs,
+            tanggal_lahir: tggl
         })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+        siswaModal.hide();
+        }
+
+        // document.getElementById('simpanData').addEventListener('',() =>{
+        //     fetch(`http://localhost:3000/siswa`,{
+        //         method: 'POST',
+        //         headers: { 'Content-type': 'application/json'},
+        //         body: JSON.stringify({
+        //             nama_depan: namadep.value,
+        //             nama_belakang: nambel.value,
+        //             alamat: alm.value,
+        //             kelas: kls.value,
+        //             jurusan: jrs.value,
+        //             tanggal_lahir: tggl.value
+        //         })
+        //     })
+        //     location.reload();
+        // })
 
         // edit siswa
-        async function editSiswa(id){
-            siswaModal.show();
-            await fetch(`$(http://localhost:3000/siswa)/$(id)`).then(res => res.json()).then(result =>{
-                console.log(result)
-                 namadep.value = result.nama_depan
-                     nambel.value = result.nambel
-                     alm.value = result.alm
-                    kls.value = result.kls
-                    jrs.value = result.jrs
-                     tggl.value = result.tggl
-            })
-        }
+
+            const editData = async (id) =>{
+                siswaModal.show();
+                document.getElementById('simpan').classList.add('d-none')
+            let index = students.findIndex(l => l.id == id)
+                document.getElementById('nama_depan').value = students[index].nama_depan;
+                document.getElementById('nama_belakang').value = students[index].nama_belakang;
+                document.getElementById('alamat').value = students[index].alamat;
+                document.getElementById('kelas').value = students[index].kelas;
+                document.getElementById('jurusan').value = students[index].jurusan;
+                document.getElementById('tanggal_lahir').value = students[index].tanggal_lahir;
+             document.getElementById('buttonEdit').setAttribute('click',`updateData(${id})`);
+            }
+            const updateData = async(id) => {
+                let namadep = document.getElementById('nama_depan').value;
+                let nambel = document.getElementById('nama_belakang').value;
+                let alm = document.getElementById('alamat').value;
+                let kls = document.getElementById('kelas').value;
+                let jrs = document.getElementById('jurusan').value;
+                let tggl = document.getElementById('tanggal_lahir').value;
+        await axios.patch(`http://localhost:3000/siswa/${id}`,{
+            nama_depan: namadep,
+            nama_belakang: nambel,
+            alamat: alm,
+            kelas: kls,
+            jurusan: jrs,
+            tanggal_lahir: tggl
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) =>{
+            console.log(error);
+        });
+            }
+        
+        // async function editSiswa(id){
+            
+        //     siswaModal.show();
+        //     await fetch(`http://localhost:3000/siswa/${id}`).then(res => res.json()).then(result =>{
+        //         console.log(result)
+        //          namadep.value = result.nama_depan
+        //              nambel.value = result.nama_belakang
+        //              alm.value = result.alamat
+        //             kls.value = result.kelas
+        //             jrs.value = result.jurusan
+        //              tggl.value = result.tanggal_lahir
+        //     })
+        //     document.getElementById('editSi').addEventListener('click', async () => {
+        //         await fetch(`http://localhost:3000/siswa/${id}`,{
+        //             method: 'PUT',
+        //         headers: { 'Content-type': 'application/json'},
+        //         body: JSON.stringify({
+        //             nama_depan: namadep.value,
+        //             nama_belakang: nambel.value,
+        //             alamat: alm.value,
+        //             kelas: kls.value,
+        //             jurusan: jrs.value,
+        //             tanggal_lahir: tggl.value
+        //         })
+        //         })
+        //     })
+        // }
 
         // menghapus data
         const hapusData = async (id) =>{
@@ -190,6 +273,7 @@
             .catch((error) => {
                 console.log(error);
             })
+            location.reload();
         }
         
     </script>
