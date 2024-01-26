@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data siswa</title>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/css/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
 </head>
+
 <body>
     <!-- Main content -->
     <div class="container mt-4">
@@ -30,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody id="hasil">
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -52,56 +56,58 @@
                             <label for="nama_depan" class="form-label">Nama depan</label>
                             <input type="text" class="form-control" id="nama_depan">
                         </div>
-                    <form action="" method="post" id="formData">
-                        <div class="mb-3">
-                            <label for="nama_depan" class="form-label">Nama Belakang</label>
-                            <input type="text" class="form-control" id="nama_belakang">
-                        </div>
-            
-                    <form action="" method="post" id="formData">
-                        <div class="mb-3">
-                            <label for="nama_depan" class="form-label">Alamat</label>
-                            <input type="text" class="form-control" id="alamat">
-                        </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                            <label for="nama_depan" class="form-label">Kelas</label>
-                            <select class="form-select" name="kelas" id="kelas">
-                                <option value="X">X</option>
-                                <option value="XI">XI</option>
-                                <option value="XII">XII</option>
-                            </select>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="nama_depan" class="form-label">Jurusan</label>
-                            <select class="form-select" name="jurusan" id="jurusan">
-                                <option value="RPL">RPL</option>
-                                <option value="TKR">TKR</option>
-                                <option value="TKRO">TKRO</option>
-                            </select>
-                        </div>
-                    </div>
-                        <div class="mb-3">
-                            <label for="nama_depan" class="form-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control" id="tanggal_lahir">
-                        </div>
-                        <div class="mb-3">
-                            <button id="buttonEdit" onclick="simpanData()" class="btn btn-primary form-control" type="button">
-                                <i class="bi bi-save-fill me-1"></i>Simpan
-                            </button>
-                           
-                        </div>
-                    </form>
+                        <form action="" method="post" id="formData">
+                            <div class="mb-3">
+                                <label for="nama_depan" class="form-label">Nama Belakang</label>
+                                <input type="text" class="form-control" id="nama_belakang">
+                            </div>
+
+                            <form action="" method="post" id="formData">
+                                <div class="mb-3">
+                                    <label for="nama_depan" class="form-label">Alamat</label>
+                                    <input type="text" class="form-control" id="alamat">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label for="nama_depan" class="form-label">Kelas</label>
+                                        <select class="form-select" name="kelas" id="kelas">
+                                            <option value="X">X</option>
+                                            <option value="XI">XI</option>
+                                            <option value="XII">XII</option>
+                                        </select>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="nama_depan" class="form-label">Jurusan</label>
+                                        <select class="form-select" name="jurusan" id="jurusan">
+                                            <option value="RPL">RPL</option>
+                                            <option value="TKR">TKR</option>
+                                            <option value="TKRO">TKRO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama_depan" class="form-label">Tanggal Lahir</label>
+                                    <input type="date" class="form-control" id="tanggal_lahir">
+                                </div>
+                                <div class="mb-3">
+                                    <button id="buttonEdit" onclick="simpanData()" class="btn btn-primary form-control"
+                                        type="button">
+                                        <i class="bi bi-save-fill me-1"></i>Simpan
+                                    </button>
+
+                                </div>
+                            </form>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- end modal -->
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script>
-       // variable 
+        // variable 
         let namadep = document.getElementById('nama_depan');
         let nambel = document.getElementById('nama_belakang');
         let alm = document.getElementById('alamat');
@@ -109,36 +115,36 @@
         let jrs = document.getElementById('jurusan');
         let tggl = document.getElementById('tgl');
         let students = []
-        
-        let siswaModal = new bootstrap.Modal('#modal-siswa',{
-            backdrop:'static',keyboard:false
+
+        let siswaModal = new bootstrap.Modal('#modal-siswa', {
+            backdrop: 'static', keyboard: false
         })
 
-       
+
 
         // tampilkan modal dengan tombol tambah
-        document.getElementById('tambah-siswa').addEventListener('click',()=>{
+        document.getElementById('tambah-siswa').addEventListener('click', () => {
             siswaModal.show()
         })
 
         // event saat modal muncul
-        document.getElementById('modal-siswa').addEventListener('shown.bs.modal',()=>{
+        document.getElementById('modal-siswa').addEventListener('shown.bs.modal', () => {
             document.getElementById('nama_depan').focus()
             // document.getElementById('buttonEdit').classList.add('d-none')
             //     document.getElementById('simpan').classList.remove('d-none')
         })
-        
+
         // mengambil data
-                const getData = async () => {
-        await axios.get(`http://localhost:3000/siswa`)
-            .then((response) => {
-             students = response.data;
-            let bucket = "";
-            let id = 1;
-            for (let i = 0; i < students.length; i++) {
-                bucket += `
+        const getData = async () => {
+            await axios.get(`http://localhost:3000/siswa`)
+                .then((response) => {
+                    students = response.data;
+                    let bucket = "";
+                    let id = 1;
+                    for (let i = 0; i < students.length; i++) {
+                        bucket += `
                 <tr class="align-middle">
-                    <td>`+ (id++) +`</td>
+                    <td>`+ (id++) + `</td>
                     <td>${students[i].nama_depan} ${students[i].nama_belakang}</td>
                     <td>${students[i].alamat}</td>
                     <td>${students[i].kelas} - ${students[i].jurusan}</td>
@@ -150,140 +156,112 @@
                     </td>
                 </tr>
                 `;
-            }
-            document.getElementById('hasil').innerHTML = bucket;
-            })
-            .catch((error) => {
-            let bucket = "";
-            console.log(error);
-            });
+                    }
+                    document.getElementById('hasil').innerHTML = bucket;
+                })
+                .catch((error) => {
+                    let bucket = "";
+                    console.log(error);
+                });
         }
-                    getData();
-        
+        getData();
+
         // menambahkan data
-        const simpanData = async (id) =>{
-            
+        const simpanData = async (id) => {
+
             let namadep = document.getElementById('nama_depan').value;
-        let nambel = document.getElementById('nama_belakang').value;
-        let alm = document.getElementById('alamat').value;
-        let kls = document.getElementById('kelas').value;
-        let jrs = document.getElementById('jurusan').value;
-        let tggl = document.getElementById('tanggal_lahir').value;
-        await axios.post(`http://localhost:3000/siswa`,{
-            nama_depan: namadep,
-            nama_belakang: nambel,
-            alamat: alm,
-            kelas: kls,
-            jurusan: jrs,
-            tanggal_lahir: tggl
-        })
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) =>{
-            console.log(error);
-        });
-        siswaModal.hide();
-        location.reload();
+            let nambel = document.getElementById('nama_belakang').value;
+            let alm = document.getElementById('alamat').value;
+            let kls = document.getElementById('kelas').value;
+            let jrs = document.getElementById('jurusan').value;
+            let tggl = document.getElementById('tanggal_lahir').value;
+            await axios.post(`http://localhost:3000/siswa`, {
+                nama_depan: namadep,
+                nama_belakang: nambel,
+                alamat: alm,
+                kelas: kls,
+                jurusan: jrs,
+                tanggal_lahir: tggl
+            })
+            siswaModal.hide();
+            Toastify({
+                text: "Data Berhasil Ditambahkan",
+                className: "info",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
+            document.getElementById('hasil').innerHTML = "";
+            getData();
         }
 
-        // document.getElementById('simpanData').addEventListener('',() =>{
-        //     fetch(`http://localhost:3000/siswa`,{
-        //         method: 'POST',
-        //         headers: { 'Content-type': 'application/json'},
-        //         body: JSON.stringify({
-        //             nama_depan: namadep.value,
-        //             nama_belakang: nambel.value,
-        //             alamat: alm.value,
-        //             kelas: kls.value,
-        //             jurusan: jrs.value,
-        //             tanggal_lahir: tggl.value
-        //         })
-        //     })
-        //     location.reload();
-        // })
 
         // edit siswa
 
-            const editData = async (id) =>{
-                siswaModal.show();
-                
+        const editData = async (id) => {
+            siswaModal.show();
+
             let index = students.findIndex(l => l.id == id)
-                document.getElementById('nama_depan').value = students[index].nama_depan;
-                document.getElementById('nama_belakang').value = students[index].nama_belakang;
-                document.getElementById('alamat').value = students[index].alamat;
-                document.getElementById('kelas').value = students[index].kelas;
-                document.getElementById('jurusan').value = students[index].jurusan;
-                document.getElementById('tanggal_lahir').value = students[index].tanggal_lahir;
-                document.getElementById('buttonEdit').innerText = 'Ubah';
-             document.getElementById('buttonEdit').onclick = () => updateData(id);
-             
-            }
-            const updateData = async(id) => {
-                let namadep = document.getElementById('nama_depan').value;
-                let nambel = document.getElementById('nama_belakang').value;
-                let alm = document.getElementById('alamat').value;
-                let kls = document.getElementById('kelas').value;
-                let jrs = document.getElementById('jurusan').value;
-                let tggl = document.getElementById('tanggal_lahir').value;
-        await axios.patch(`http://localhost:3000/siswa/${id}`,{
-            nama_depan: namadep,
-            nama_belakang: nambel,
-            alamat: alm,
-            kelas: kls,
-            jurusan: jrs,
-            tanggal_lahir: tggl
-        })
-        
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) =>{
-            console.log(error);
-        });
-        location.reload();
-            }
-        
-        // async function editSiswa(id){
-            
-        //     siswaModal.show();
-        //     await fetch(`http://localhost:3000/siswa/${id}`).then(res => res.json()).then(result =>{
-        //         console.log(result)
-        //          namadep.value = result.nama_depan
-        //              nambel.value = result.nama_belakang
-        //              alm.value = result.alamat
-        //             kls.value = result.kelas
-        //             jrs.value = result.jurusan
-        //              tggl.value = result.tanggal_lahir
-        //     })
-        //     document.getElementById('editSi').addEventListener('click', async () => {
-        //         await fetch(`http://localhost:3000/siswa/${id}`,{
-        //             method: 'PUT',
-        //         headers: { 'Content-type': 'application/json'},
-        //         body: JSON.stringify({
-        //             nama_depan: namadep.value,
-        //             nama_belakang: nambel.value,
-        //             alamat: alm.value,
-        //             kelas: kls.value,
-        //             jurusan: jrs.value,
-        //             tanggal_lahir: tggl.value
-        //         })
-        //         })
-        //     })
-        // }
+            document.getElementById('nama_depan').value = students[index].nama_depan;
+            document.getElementById('nama_belakang').value = students[index].nama_belakang;
+            document.getElementById('alamat').value = students[index].alamat;
+            document.getElementById('kelas').value = students[index].kelas;
+            document.getElementById('jurusan').value = students[index].jurusan;
+            document.getElementById('tanggal_lahir').value = students[index].tanggal_lahir;
+            document.getElementById('buttonEdit').innerText = 'Ubah';
+            document.getElementById('buttonEdit').onclick = () => updateData(id);
+
+        }
+        const updateData = async (id) => {
+            let namadep = document.getElementById('nama_depan').value;
+            let nambel = document.getElementById('nama_belakang').value;
+            let alm = document.getElementById('alamat').value;
+            let kls = document.getElementById('kelas').value;
+            let jrs = document.getElementById('jurusan').value;
+            let tggl = document.getElementById('tanggal_lahir').value;
+            await axios.patch(`http://localhost:3000/siswa/${id}`, {
+                nama_depan: namadep,
+                nama_belakang: nambel,
+                alamat: alm,
+                kelas: kls,
+                jurusan: jrs,
+                tanggal_lahir: tggl
+            })
+
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            Toastify({
+                text: "Data Berhasil Diedit",
+                className: "info",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
+            document.getElementById('hasil').innerHTML = "";
+            getData();
+        }
 
         // menghapus data
-        const hapusData = async (id) =>{
+        const hapusData = async (id) => {
             await axios.delete(`http://localhost:3000/siswa/${id}`)
-            .then((response) =>{
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            location.reload();
+            Toastify({
+                text: "Data Berhasil Dihapus",
+                className: "info",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+            }).showToast();
+            document.getElementById('hasil').innerHTML = "";
+            getData();
         }
-        
+
     </script>
+     
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
+
 </html>
