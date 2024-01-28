@@ -120,7 +120,15 @@
             backdrop: 'static', keyboard: false
         })
 
-
+        // mengkosongkan data
+        function kosongData(){
+            nama_depan.value = ""
+            nama_belakang.value = ""
+            alamat.value = ""
+            kelas.value = "X"
+            jurusan.value = "RPL"
+            tanggal_lahir.value = ""
+        }
 
         // tampilkan modal dengan tombol tambah
         document.getElementById('tambah-siswa').addEventListener('click', () => {
@@ -130,6 +138,7 @@
         // event saat modal muncul
         document.getElementById('modal-siswa').addEventListener('shown.bs.modal', () => {
             document.getElementById('nama_depan').focus()
+            kosongData();
             // document.getElementById('buttonEdit').classList.add('d-none')
             //     document.getElementById('simpan').classList.remove('d-none')
         })
